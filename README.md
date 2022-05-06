@@ -1,1 +1,1 @@
-# My vim/neovim configuration
+# My Linux common used configuration
