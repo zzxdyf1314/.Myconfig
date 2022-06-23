@@ -66,6 +66,7 @@ map tx :r !figlet
 map s <nop>
 map S :w<CR>
 map Q :q<CR>
+map <A-Q> :q!<CR>
 map R :source $MYVIMRC<CR>
 
 noremap j h
@@ -78,22 +79,23 @@ map sk :set splitbelow<CR>:split<CR>
 map sj :set nosplitright<CR>:vsplit<CR>
 map s; :set splitright<CR>:vsplit<CR>
 
-map tu :tabe<CR>
-map tj :-tabnext<CR>
-map t; :+tabnext<CR>
+map <LEADER>u :tabe<CR>
+map <LEADER>J :-tabnext<CR>
+map <LEADER>; :+tabnext<CR>
 
 map sf <C-w>t<C-w>H
 map sh <C-w>t<C-w>K
 
 
-map <leader>F :NERDTreeToggle<CR>
+map <leader>F :NvimTreeToggle<CR>
 map vv :UndotreeToggle<CR>
 
+" for BufferLine to close a buffer
+noremap <LEADER>w :Bdelete<CR>
 
 call plug#begin()
 " Use release branch (Recommend)
 Plug 'vim-airline/vim-airline'
-Plug 'preservim/nerdtree'
 Plug 'dense-analysis/ale'
 Plug 'mbbill/undotree'
 Plug 'honza/vim-snippets'
@@ -115,16 +117,39 @@ Plug 'rafi/awesome-vim-colorschemes'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'voldikss/vim-floaterm'
+Plug 'ray-x/aurora'
+Plug 'mhartington/oceanic-next'
+Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
+Plug 'christianchiarulli/nvcode-color-schemes.vim'
+Plug 'kyazdani42/nvim-tree.lua'
 
 call plug#end()
 
 
 "colorscheme seoul256
+"colorscheme aurora
+" aurora config
+"set termguicolors
 
-""===
+"colorscheme OceanicNext
+""colorscheme nvcode " Or whatever colorscheme you make
+"" configure nvcode-color-schemes
+"let g:nvcode_termcolors=256
+
+"" checks if your terminal has 24-bit color support
+"if (has("termguicolors"))
+    "hi LineNr ctermbg=NONE guibg=NONE
+"endif
+
+"" ===
 ""===coc-nvim
 ""===
-"let g:coc_global_extensions = ['coc-json', 'coc-vimlsp']
+"let g:coc_global_extensions = [
+      "\'coc-json', 
+      "\'coc-vimlsp', 
+      "\'coc-clangd'
+      "\]
 "" TextEdit might fail if hidden is not set.
 "set hidden
 
@@ -311,7 +336,49 @@ call plug#end()
 "nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 "" Using Lua functions
-"nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
-"nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-"nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-"nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+""nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+""nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+""nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+""nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+
+"" FloatTerminal
+"noremap <LEADER>tt :FloatermToggle<CR>
+"lua <<EOF
+"-- lua code goes here
+
+"EOF
+
+"" Bufferline
+"lua << EOF
+"require("bufferline").setup{}
+"EOF
+"" These commands will navigate through buffers in order regardless of which mode you are using
+"" e.g. if you change the order of buffers :bnext and :bprevious will not respect the custom ordering
+"nnoremap <silent>mv :BufferLineCycleNext<CR>
+"nnoremap <silent>mb :BufferLineCyclePrev<CR>
+
+"" These commands will move the current buffer backwards or forwards in the bufferline
+"nnoremap <silent><mymap> :BufferLineMoveNext<CR>
+"nnoremap <silent><mymap> :BufferLineMovePrev<CR>
+
+"" These commands will sort buffers by directory, language, or a custom criteria
+"nnoremap <silent>be :BufferLineSortByExtension<CR>
+"nnoremap <silent>bd :BufferLineSortByDirectory<CR>
+"nnoremap <silent><mymap> :lua require'bufferline'.sort_buffers_by(function (buf_a, buf_b) return buf_a.id < buf_b.id end)<CR>
+
+"" configure treesitter
+"lua << EOF
+"require'nvim-treesitter.configs'.setup {
+  "ensure_installed = "c", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  "sync_install = false,
+  "highlight = {
+    "enable = true,              -- false will disable the whole extension
+    "additional_vim_regex_highlighting = false,
+  "},
+"}
+"EOF
+
+""lua << EOF
+""-- empty setup using defaults
+""require("nvim-tree").setup()
+""EOF
